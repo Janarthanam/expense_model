@@ -9,7 +9,7 @@ router = APIRouter()
 # Load the machine learning model
 # model = joblib.load("model.joblib")
 
-debit_matcher = re.compile(r'\bAcct\s+(?P<account_number>\w+).*?for\s+Rs\s+(?P<amount>\d+\.\d{2}).*?on\s+(?P<date>\d{1,2}-[A-Za-z]{3}-\d{2}).*?(?P<merchant>[a-zA-Z\s]+)\bcredited')
+debit_matcher = re.compile(r'\bAcct\s+(?P<account_number>\w+).*?for\s+Rs\s+(?P<amount>\d+\.\d{2}).*?on\s+(?P<date>\d{1,2}-[A-Za-z]{3}-\d{2}).*?(?P<beneficiary>[a-zA-Z\s]+)\bcredited')
 
 # Define the API endpoint
 @router.post("/regex/extract")
@@ -29,7 +29,7 @@ def extract_feature(expense_input: ExpenseInput) -> ExpenseOutput:
     out.account = match.group(1)
     out.amount = match.group(2)
     out.date = match.group(3)
-    out.merchant = match.group(4)
+    out.beneficiary = match.group(4)
 
     return out
 

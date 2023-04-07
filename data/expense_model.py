@@ -8,8 +8,11 @@ class ExpenseOutput(BaseModel):
     debit: bool = False
     account: str | None
     amount: float | None
-    merchant: str | None
+    beneficiary: str | None
     date: str | None
     bank: str | None
     currency: str = "INR"
     transaction_type: str = "debit"
+    beneficiary_type: str | None
+    transaction_id: str | None
+    merchant_type: str | None
