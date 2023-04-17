@@ -6,6 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from datetime import datetime
 from uvicorn.logging import DefaultFormatter
 import logging
+import uvicorn
 
 logger = logging.getLogger(__name__)
 handler = logging.StreamHandler()
@@ -26,3 +27,7 @@ async def log_requests(request, call_next):
         f"{request.method} {request.url.path} {response.status_code} {process_time:.2f}ms"
     )
     return response
+
+
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=8080)
