@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "expense-model"
+version = "0.1.0"
+description = "A simple expense model api"
+authors = ["Janar <janarthanamr@gmail.com>"]
+license = "BSD"
+readme = "README.md"
+packages = [{include = "expense_model"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+
+[tool.poetry.scripts]
+server = "expense-model.__main__"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
