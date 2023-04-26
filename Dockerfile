@@ -16,5 +16,6 @@ COPY expense_model .
 # Expose the port the app runs on
 EXPOSE 8080
 
+ENV OPENAI_API_KEY=zzz
 # Start the application using Uvicorn
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8080"]
