@@ -9,20 +9,32 @@ from data.expense_model import ExpenseInput,ExpenseOutput
 
 router = APIRouter()
 
-def completion_streamer(input: ExpenseInput):
+__prompt = """convert a text from bank in to json format.
+    fields could be: bank*,account*,amount*, currency*, transaction_type, date,transaction_id,beneficiary, beneficiary_type
+    fields with * are mandatory fields
+    transaction_type is one of credit, debit or due
+    beneficiary_type is one of merchant,personal
+    default currency is INR
+    replace all empty values in json with null
+"""
+
+__eot = "<|endoftext|>"
+
+def llm_parser(input: ExpenseInput):
     openai.api_key = os.getenv("OPENAI_API_KEY")
 
     try:
         response = openai.Completion.create(
             model="text-davinci-003",
-            prompt=f"convert bank messages to json format. keys in json: \"bank\", \"account\", \"amount\", \"currency\", \"transaction_type\":credit/debit/due, \"date\", \"beneficiary\", \"msg_date\", \"transaction_id\", \"beneficiary_type\", \"merchant_type\"\\nbeneficiary is not available use \"self\"\\nbeneficiary_type is individual or merchant. \\nmerchant_type\\ncurrency use standard currency type\\nmsg_date is same as date\\ntransaction_id is a string\\n strictly json\n{input.text}",
+            prompt=f"{__prompt}{input.text}{__eot}",
             temperature=0,
             max_tokens=500,
             top_p=1,
-            frequency_penalty=0.5,
+            frequency_penalty=0,
             presence_penalty=0,
         )
 
+        print(response)
         return ExpenseOutput(**json.loads(response.choices[0].text))
     except Exception as e:
         print(f"Exception {e} {response}")
@@ -31,4 +43,4 @@ def completion_streamer(input: ExpenseInput):
 @router.post("/extract")
 @router.post("/gpt3/extract")
 async def extract(input: ExpenseInput):
-    return StreamingResponse(completion_streamer(input), media_type="application/json")
+    return llm_parser(input)
