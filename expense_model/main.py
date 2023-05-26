@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 from fastapi import FastAPI
-from routes import gpt3,regex
+from routes import gpt3,regex,bulk_extract,static
 from fastapi.middleware import Middleware
 from fastapi.middleware.cors import CORSMiddleware
 from datetime import datetime
@@ -17,6 +17,8 @@ logger.addHandler(handler)
 app = FastAPI()
 app.include_router(regex.router)
 app.include_router(gpt3.router)
+app.include_router(bulk_extract.router)
+app.include_router(static.router)
 
 @app.middleware("http")
 async def log_requests(request, call_next):

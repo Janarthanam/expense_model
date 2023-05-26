@@ -4,3 +4,5 @@ joblib
 pydantic
 datetime
 openai
+pypdf2
+python-multipart
